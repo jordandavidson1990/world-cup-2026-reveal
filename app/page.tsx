@@ -18,8 +18,7 @@ import { codeToFlagEmoji } from "./utils/codeToFlagEmoji";
 export default function Page() {
   const [started, setStarted] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const { teams, fixtures, teamStats, loading, source, warning } =
-    useWorldCupData();
+  const { teams, fixtures, teamStats, warning } = useWorldCupData();
 
   const results = deriveEntrantResults(entrants, teams);
   const woodenSpoon = getWoodenSpoonWinner(entrants, teamStats);
@@ -34,7 +33,7 @@ export default function Page() {
         if (key) acc[key] = t.name;
         return acc;
       }, {}),
-    [teams],
+    [teams]
   );
 
   const {
@@ -155,12 +154,6 @@ export default function Page() {
           setStarted(false);
         }}
       />
-      <p style={{ marginTop: 16 }}>
-        Data fetched: <strong>{loading ? "loading..." : source}</strong>
-      </p>
-      {warning ? (
-        <p style={{ color: "#f59e0b", marginTop: 8 }}>{warning}</p>
-      ) : null}
     </main>
   );
 }

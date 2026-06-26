@@ -47,6 +47,7 @@ export function getTeamDisplayName(code: string): string {
     COD: "DR Congo",
     CUW: "Curaçao",
     BIH: "Bosnia and Herzegovina",
+    UZB: "Uzbekistan",
   };
 
   return map[code.toUpperCase()] ?? "Unknown country";
