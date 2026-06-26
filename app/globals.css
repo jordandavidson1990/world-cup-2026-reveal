@@ -1,26 +1,234 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f4f7f6;
+  --fg: #0b132b;
+  --card: #ffffff;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --primary: #00cfb5;
+  --accent: #0076f4;
+  --danger: #ef4444;
+  --success: #22c55e;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --fg: #f4f7f6;
+  --card: #151515;
+  --muted: #a1a1aa;
+  --border: #2a2a2a;
+  --primary: #00f0ff;
+  --accent: #9b5cff;
+  --danger: #ff5c7a;
+  --success: #4ade80;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at 20% 10%,
+      color-mix(in srgb, var(--primary) 12%, transparent) 0,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      color-mix(in srgb, var(--accent) 10%, transparent) 0,
+      transparent 35%
+    ),
+    var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body), Inter, Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  line-height: 1.08;
+}
+
+h1 {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.05em;
+  font-size: clamp(2.3rem, 6vw, 4.2rem);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.03em;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  text-transform: uppercase;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 34px 22px 54px;
+}
+
+.card {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--card) 92%, #ffffff 8%),
+    var(--card)
+  );
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.09);
+}
+
+.card-lg {
+  padding: 24px;
+  border-radius: 22px;
+}
+
+.row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--fg);
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    transform 0.15s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-out {
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+  color: var(--danger);
+}
+
+.badge-in {
+  background: color-mix(in srgb, var(--success) 18%, transparent);
+  color: var(--success);
+}
+
+.hero-sub {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 1.04rem;
+}
+
+.fun-title {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.fun-subtitle {
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
+.stage-pill {
+  margin-top: 16px;
+  display: inline-block;
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+  color: var(--fg);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
+  border-radius: 999px;
+  padding: 8px 13px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.spaced-list {
+  margin: 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 10px;
+}
+
+.reveal-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.panel-soft {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--card) 88%, var(--primary) 12%);
+}
+
+.fixture-round-block {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.fixture-round-title {
+  margin-bottom: 10px;
+}
+
+.fixture-list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.fixture-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--card) 90%, var(--accent) 10%);
+}
+
+.fixture-teams {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-weight: 700;
+}
+
+.fixture-vs {
+  opacity: 0.7;
+  font-weight: 600;
+}
+
+.fixture-date {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
