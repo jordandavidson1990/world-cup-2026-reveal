@@ -1,5 +1,8 @@
 import { Entrant, TeamTournamentStats } from "../types";
 import { entrants } from "../data/sweep";
+import { getTeamDisplayName } from "../utils/getTeamDisplayName";
+import { codeToFlagEmoji } from "../utils/codeToFlagEmoji";
+import { buildOwnerMap } from "../utils/buildOwnerMap";
 
 type WoodenSpoonProps = {
   loser: Entrant | null;
@@ -22,98 +25,6 @@ const toNum = (value: unknown) => {
   return Number.isFinite(n) ? n : 0;
 };
 
-function codeToFlagEmoji(code: string): string {
-  const c = (code || "").toUpperCase();
-
-  const special: Record<string, string> = {
-    ENG: "🏴",
-    SCO: "🏴",
-    TUR: "🇹🇷",
-    KOR: "🇰🇷",
-    CIV: "🇨🇮",
-    CPV: "🇨🇻",
-    COD: "🇨🇩",
-    CUW: "🇨🇼",
-    BIH: "🇧🇦",
-    IRN: "🇮🇷",
-    KSA: "🇸🇦",
-    UZB: "🇺🇿",
-    JOR: "🇯🇴",
-    QAT: "🇶🇦",
-    PAR: "🇵🇾",
-    MAR: "🇲🇦",
-  };
-  if (special[c]) return special[c];
-
-  const fifaToIso2: Record<string, string> = {
-    ARG: "AR",
-    AUS: "AU",
-    AUT: "AT",
-    ALG: "DZ",
-    BEL: "BE",
-    BRA: "BR",
-    CAN: "CA",
-    COL: "CO",
-    CRO: "HR",
-    CZE: "CZ",
-    ECU: "EC",
-    EGY: "EG",
-    FRA: "FR",
-    GER: "DE",
-    GHA: "GH",
-    HAI: "HT",
-    IRQ: "IQ",
-    JPN: "JP",
-    MEX: "MX",
-    NED: "NL",
-    NOR: "NO",
-    NZL: "NZ",
-    PAN: "PA",
-    POR: "PT",
-    RSA: "ZA",
-    SEN: "SN",
-    ESP: "ES",
-    SUI: "CH",
-    SWE: "SE",
-    TUN: "TN",
-    URU: "UY",
-    USA: "US",
-  };
-
-  const iso2 = c.length === 2 ? c : fifaToIso2[c];
-  if (!iso2 || iso2.length !== 2) return "🏳️";
-
-  const A = 0x1f1e6;
-  const first = iso2.charCodeAt(0) - 65 + A;
-  const second = iso2.charCodeAt(1) - 65 + A;
-
-  if (
-    first < 0x1f1e6 ||
-    first > 0x1f1ff ||
-    second < 0x1f1e6 ||
-    second > 0x1f1ff
-  ) {
-    return "🏳️";
-  }
-
-  return String.fromCodePoint(first, second);
-}
-
-function buildOwnerMap(allEntrants: Entrant[]) {
-  const ownerMap = new Map<string, string[]>();
-
-  for (const e of allEntrants) {
-    for (const code of e.teamCodes) {
-      const key = code.toUpperCase();
-      const existing = ownerMap.get(key) ?? [];
-      existing.push(e.name);
-      ownerMap.set(key, existing);
-    }
-  }
-
-  return ownerMap;
-}
-
 function buildWorstTableRows(
   teamStats: Record<string, TeamTournamentStats>,
   teamNames: Record<string, string>,
@@ -128,7 +39,7 @@ function buildWorstTableRows(
 
     return {
       code,
-      name: teamNames[code] ?? code,
+      name: getTeamDisplayName(code),
       owners: ownerMap.get(code.toUpperCase()) ?? [],
       points,
       goalsFor,
@@ -166,7 +77,7 @@ export default function WoodenSpoon({
       };
       return {
         code,
-        name: teamNames[code] ?? code,
+        name: getTeamDisplayName(code),
         owners: ownerMap.get(code.toUpperCase()) ?? [],
         points: toNum(stat.points),
         goalsFor: toNum(stat.goalsFor),

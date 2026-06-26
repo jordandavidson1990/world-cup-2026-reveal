@@ -61,8 +61,6 @@ export const getWoodenSpoonWinner = (
     };
   });
 
-  console.log("ranked:", ranked);
-
   ranked.sort((a, b) => {
     // 1) Lowest points loses
     if (a.points !== b.points) return a.points - b.points;

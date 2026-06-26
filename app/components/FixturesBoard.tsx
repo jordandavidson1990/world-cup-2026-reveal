@@ -1,19 +1,23 @@
 import { Fixture, Team } from "../types";
 
 const roundEmoji: Record<Fixture["round"], string> = {
+  GG: "🟢",
   R32: "🔥",
   R16: "⚔️",
   QF: "🎯",
   SF: "🚀",
+  "3R": "🥉",
   F: "🏆",
 };
 
 const roundLabel: Record<Fixture["round"], string> = {
+  GG: "Group Games",
   R32: "Round of 32",
   R16: "Round of 16",
   QF: "Quarter-finals",
   SF: "Semi-finals",
-  F: "Grand Final",
+  "3R": "3rd Place Playoff",
+  F: "Final",
 };
 
 function formatKickoffDate(kickoffUtc?: string) {

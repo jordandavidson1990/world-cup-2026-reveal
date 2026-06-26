@@ -11,7 +11,9 @@ import StageHeader from "./components/StageHeader";
 import RevealCard from "./components/RevealCard";
 import FixturesBoard from "./components/FixturesBoard";
 import WoodenSpoon from "./components/WoodenSpoon";
+import WoodenSpoonReveal from "./components/WoodenSpoonReveal";
 import Controls from "./components/Controls";
+import { codeToFlagEmoji } from "./utils/codeToFlagEmoji";
 
 export default function Page() {
   const [started, setStarted] = useState(false);
@@ -22,17 +24,28 @@ export default function Page() {
   const results = deriveEntrantResults(entrants, teams);
   const woodenSpoon = getWoodenSpoonWinner(entrants, teamStats);
 
+  // IMPORTANT: uppercase normalized keys
   const teamNameMap = useMemo(
     () =>
       teams.reduce<Record<string, string>>((acc, t) => {
-        acc[t.code] = t.name;
+        const key = String(t.code ?? "")
+          .trim()
+          .toUpperCase();
+        if (key) acc[key] = t.name;
         return acc;
       }, {}),
     [teams],
   );
 
-  const { stage, current, remaining, nextReveal, prevReveal, reset } =
-    usePresentationFlow(results);
+  const {
+    stage,
+    current,
+    remaining,
+    woodenRevealIndex,
+    nextReveal,
+    prevReveal,
+    reset,
+  } = usePresentationFlow(results);
 
   if (!started) {
     return (
@@ -60,15 +73,9 @@ export default function Page() {
             <li>💔 Eliminated players first</li>
             <li>✨ Remaining players in one click</li>
             <li>🗓️ Remaining fixtures and dates</li>
-            <li>🥄 Wooden spoon winner (lowest goals, then GD)</li>
+            <li>🥁 Wooden spoon bottom-10 reveal</li>
+            <li>🥄 Full wooden spoon table + winner</li>
           </ul>
-
-          <p style={{ marginTop: 16 }}>
-            Data source: <strong>{loading ? "loading..." : source}</strong>
-          </p>
-          {warning ? (
-            <p style={{ color: "#f59e0b", marginTop: 8 }}>{warning}</p>
-          ) : null}
 
           <button onClick={() => setStarted(true)} style={{ marginTop: 18 }}>
             Start the show ▶
@@ -86,7 +93,6 @@ export default function Page() {
       >
         <div>
           <h1>🏆 World Cup Sweep Night</h1>
-          <p className="hero-sub">Let the drama unfold...</p>
         </div>
         <ThemeToggle theme={theme} onToggle={toggleTheme} />
       </div>
@@ -107,14 +113,13 @@ export default function Page() {
 
         {stage === "remaining" && (
           <div className="card card-lg">
-            <h3 className="fun-title">✨ Still In The Hunt</h3>
-            <p className="fun-subtitle">One screen, all remaining players.</p>
-
             <ul className="spaced-list" style={{ marginTop: 16 }}>
               {remaining.map((r) => (
                 <li key={r.entrant.id}>
-                  <strong>{r.entrant.name}</strong> —{" "}
-                  {r.activeTeams.map((t) => t.name).join(", ")}
+                  <strong>{r.entrant.name}</strong>:{" "}
+                  {r.activeTeams
+                    .map((t) => ` ${t.name} ${codeToFlagEmoji(t.code)}`)
+                    .join(", ")}
                 </li>
               ))}
             </ul>
@@ -123,6 +128,14 @@ export default function Page() {
 
         {stage === "fixtures" && (
           <FixturesBoard fixtures={fixtures} teams={teams} />
+        )}
+
+        {stage === "wooden-spoon-reveal" && (
+          <WoodenSpoonReveal
+            teamStats={teamStats}
+            revealIndex={woodenRevealIndex}
+            teamNames={teamNameMap}
+          />
         )}
 
         {stage === "wooden-spoon" && (
@@ -142,6 +155,12 @@ export default function Page() {
           setStarted(false);
         }}
       />
+      <p style={{ marginTop: 16 }}>
+        Data fetched: <strong>{loading ? "loading..." : source}</strong>
+      </p>
+      {warning ? (
+        <p style={{ color: "#f59e0b", marginTop: 8 }}>{warning}</p>
+      ) : null}
     </main>
   );
 }

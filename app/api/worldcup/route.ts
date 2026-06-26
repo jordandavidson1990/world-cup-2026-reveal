@@ -36,19 +36,45 @@ type ApiMatchesResponse = {
   matches?: ApiMatch[];
 };
 
-function toRound(stage: string | undefined): Fixture["round"] {
-  const s = (stage ?? "").toUpperCase();
-  if (s.includes("LAST_32") || s.includes("ROUND_OF_32")) return "R32";
-  if (s.includes("LAST_16") || s.includes("ROUND_OF_16")) return "R16";
-  if (s.includes("QUARTER")) return "QF";
-  if (s.includes("SEMI")) return "SF";
-  return "F";
-}
-
 function codeOf(team?: ApiTeam): string {
   return String(
     team?.tla ?? team?.shortName ?? team?.name ?? "TBD",
   ).toUpperCase();
+}
+
+/**
+ * Business rule:
+ * - ONLY matches on 19 July are "F" (Grand Final)
+ * - If API sends "FINAL" for any other date, treat as group/early round ("R32")
+ * - Other knockout mappings stay as-is
+ */
+function toRound(
+  stage: string | undefined,
+  kickoffUtc?: string,
+): Fixture["round"] {
+  const s = (stage ?? "").toUpperCase();
+
+  const d = kickoffUtc ? new Date(kickoffUtc) : null;
+  const is19July =
+    !!d &&
+    Number.isFinite(d.getTime()) &&
+    d.getUTCMonth() === 6 && // July (0-based)
+    d.getUTCDate() === 19;
+  const is18July =
+    !!d &&
+    Number.isFinite(d.getTime()) &&
+    d.getUTCMonth() === 6 && // July (0-based)
+    d.getUTCDate() === 18;
+
+  if (is19July) return "F";
+  if (is18July) return "3R";
+
+  if (s.includes("SEMI")) return "SF";
+  if (s.includes("QUARTER")) return "QF";
+  if (s.includes("LAST_16") || s.includes("ROUND_OF_16")) return "R16";
+  if (s.includes("LAST_32") || s.includes("ROUND_OF_32")) return "R32";
+
+  return "GG";
 }
 
 function buildDefaultStats(teams: Team[]): Record<string, TeamTournamentStats> {
@@ -73,8 +99,6 @@ function deriveTeamStatsFromFinishedMatches(
   for (const m of matches) {
     const homeGoals = m.score?.fullTime?.home;
     const awayGoals = m.score?.fullTime?.away;
-
-    // only use matches with final numeric scores
     if (homeGoals === null || awayGoals === null) continue;
 
     const homeCode = codeOf(m.homeTeam);
@@ -83,13 +107,11 @@ function deriveTeamStatsFromFinishedMatches(
     const home = ensure(homeCode);
     const away = ensure(awayCode);
 
-    // GF / GA
     home.goalsFor += homeGoals;
     home.goalsAgainst += awayGoals;
     away.goalsFor += awayGoals;
     away.goalsAgainst += homeGoals;
 
-    // points: 3 win, 1 draw, 0 loss
     if (homeGoals > awayGoals) {
       home.points += 3;
     } else if (awayGoals > homeGoals) {
@@ -168,7 +190,7 @@ export async function GET() {
       .filter((m) => m.status !== "FINISHED")
       .map((m, i) => ({
         id: String(m.id ?? i),
-        round: toRound(m.stage),
+        round: toRound(m.stage, m.utcDate),
         home: codeOf(m.homeTeam),
         away: codeOf(m.awayTeam),
         kickoffUtc: m.utcDate ?? undefined,

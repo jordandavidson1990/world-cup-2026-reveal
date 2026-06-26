@@ -20,7 +20,7 @@ export type TeamTournamentStats = {
 
 export type Fixture = {
   id: string;
-  round: "R32" | "R16" | "QF" | "SF" | "F";
+  round: "GG" | "R32" | "R16" | "QF" | "SF" | "3R" | "F";
   home: string;
   away: string;
   kickoffUtc?: string;

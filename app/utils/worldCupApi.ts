@@ -22,8 +22,6 @@ export function mapProviderFixturesToInternal(raw: any[]): Fixture[] {
     return "F";
   };
 
-  console.log(raw);
-
   return raw.map((f, i) => ({
     id: String(f.id ?? i),
     round: toRound(String(f.stage_name ?? f.stage ?? "Final")),
