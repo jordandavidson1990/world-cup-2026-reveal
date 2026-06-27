@@ -72,8 +72,6 @@ export const getWoodenSpoonWinner = (
     return { entrant, ...worstTeam };
   });
 
-  console.log("Wooden spoon ranking (worst single team):", ranked);
-
   ranked.sort((a, b) => {
     if (a.points !== b.points) return a.points - b.points;
     if (a.goalDifference !== b.goalDifference)
