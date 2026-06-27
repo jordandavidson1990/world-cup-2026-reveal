@@ -47,7 +47,7 @@ export const entrants: Entrant[] = [
 
 export const fallbackTeams: Team[] = [
   { code: "MEX", name: "Mexico", status: "active" },
-  { code: "CZE", name: "Czechia", status: "active" },
+  { code: "CZE", name: "Czechia", status: "eliminated" }, // ✗ eliminated
   { code: "ENG", name: "England", status: "active" },
   { code: "NOR", name: "Norway", status: "active" },
   { code: "BEL", name: "Belgium", status: "active" },
@@ -56,41 +56,41 @@ export const fallbackTeams: Team[] = [
   { code: "CAN", name: "Canada", status: "active" },
   { code: "NED", name: "Netherlands", status: "active" },
   { code: "RSA", name: "South Africa", status: "active" },
-  { code: "CPV", name: "Cape Verde", status: "active" },
+  { code: "CPV", name: "Cape Verde", status: "eliminated" },
   { code: "SWE", name: "Sweden", status: "active" },
   { code: "AUS", name: "Australia", status: "active" },
   { code: "EGY", name: "Egypt", status: "active" },
   { code: "SEN", name: "Senegal", status: "active" },
-  { code: "TUN", name: "Tunisia", status: "active" },
+  { code: "TUN", name: "Tunisia", status: "eliminated" }, // ✗ eliminated
   { code: "SCO", name: "Scotland", status: "active" },
   { code: "KOR", name: "South Korea", status: "active" },
   { code: "ESP", name: "Spain", status: "active" },
   { code: "PAR", name: "Paraguay", status: "active" },
   { code: "CIV", name: "Ivory Coast", status: "active" },
-  { code: "URU", name: "Uruguay", status: "active" },
-  { code: "TUR", name: "Türkiye", status: "eliminated" },
+  { code: "URU", name: "Uruguay", status: "eliminated" }, // ✗ eliminated
+  { code: "TUR", name: "Türkiye", status: "eliminated" }, // ✗ eliminated
   { code: "GER", name: "Germany", status: "active" },
   { code: "POR", name: "Portugal", status: "active" },
-  { code: "PAN", name: "Panama", status: "active" },
+  { code: "PAN", name: "Panama", status: "eliminated" }, // ✗ eliminated
   { code: "IRN", name: "Iran", status: "active" },
   { code: "AUT", name: "Austria", status: "active" },
   { code: "ECU", name: "Ecuador", status: "active" },
-  { code: "HAI", name: "Haiti", status: "active" },
+  { code: "HAI", name: "Haiti", status: "eliminated" }, // ✗ eliminated
   { code: "BIH", name: "Bosnia and Herzegovina", status: "active" },
-  { code: "KSA", name: "Saudi Arabia", status: "active" },
-  { code: "QAT", name: "Qatar", status: "active" },
-  { code: "JOR", name: "Jordan", status: "active" },
+  { code: "KSA", name: "Saudi Arabia", status: "eliminated" }, // ✗ eliminated
+  { code: "QAT", name: "Qatar", status: "eliminated" }, // ✗ eliminated
+  { code: "JOR", name: "Jordan", status: "eliminated" }, // ✗ eliminated
   { code: "UZB", name: "Uzbekistan", status: "active" },
   { code: "ALG", name: "Algeria", status: "active" },
   { code: "SUI", name: "Switzerland", status: "active" },
   { code: "CRO", name: "Croatia", status: "active" },
   { code: "FRA", name: "France", status: "active" },
   { code: "USA", name: "United States", status: "active" },
-  { code: "NZL", name: "New Zealand", status: "eliminated" },
-  { code: "CUW", name: "Curacao", status: "active" },
+  { code: "NZL", name: "New Zealand", status: "eliminated" }, // ✗ eliminated
+  { code: "CUW", name: "Curacao", status: "eliminated" }, // ✗ eliminated
   { code: "COD", name: "DR Congo", status: "active" },
   { code: "BRA", name: "Brazil", status: "active" },
-  { code: "IRQ", name: "Iraq", status: "active" },
+  { code: "IRQ", name: "Iraq", status: "eliminated" }, // ✗ eliminated
   { code: "GHA", name: "Ghana", status: "active" },
   { code: "ARG", name: "Argentina", status: "active" },
   { code: "MAR", name: "Morocco", status: "active" },

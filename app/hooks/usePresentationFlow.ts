@@ -22,7 +22,7 @@ export const usePresentationFlow = (results: EntrantResult[]) => {
       results
         .filter((r) => r.isEliminated)
         .sort((a, b) => a.entrant.name.localeCompare(b.entrant.name)),
-    [results],
+    [results]
   );
 
   const remaining = useMemo(
@@ -30,15 +30,15 @@ export const usePresentationFlow = (results: EntrantResult[]) => {
       results
         .filter((r) => !r.isEliminated)
         .sort((a, b) => a.entrant.name.localeCompare(b.entrant.name)),
-    [results],
+    [results]
   );
 
   const currentList =
     stage === "eliminated"
       ? eliminated
       : stage === "remaining"
-        ? remaining
-        : [];
+      ? remaining
+      : [];
 
   const current = currentList[revealIndex] ?? null;
 
@@ -66,7 +66,7 @@ export const usePresentationFlow = (results: EntrantResult[]) => {
     }
 
     if (stage === "wooden-spoon-reveal") {
-      if (woodenRevealIndex < WOODEN_REVEAL_COUNT - 1) {
+      if (woodenRevealIndex < WOODEN_REVEAL_COUNT) {
         setWoodenRevealIndex((i) => i + 1);
         return;
       }
@@ -104,7 +104,7 @@ export const usePresentationFlow = (results: EntrantResult[]) => {
 
     if (stage === "wooden-spoon") {
       setStage("wooden-spoon-reveal");
-      setWoodenRevealIndex(WOODEN_REVEAL_COUNT - 1);
+      setWoodenRevealIndex(WOODEN_REVEAL_COUNT);
     }
   };
 

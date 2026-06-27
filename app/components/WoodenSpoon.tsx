@@ -28,7 +28,7 @@ const toNum = (value: unknown) => {
 function buildWorstTableRows(
   teamStats: Record<string, TeamTournamentStats>,
   teamNames: Record<string, string>,
-  ownerMap: Map<string, string[]>,
+  ownerMap: Map<string, string[]>
 ): Row[] {
   const rows: Row[] = Object.keys(teamStats).map((code) => {
     const raw = teamStats[code] ?? { points: 0, goalsFor: 0, goalsAgainst: 0 };
@@ -68,55 +68,15 @@ export default function WoodenSpoon({
   const ownerMap = buildOwnerMap(entrants);
   const rows = buildWorstTableRows(teamStats, teamNames, ownerMap);
 
-  const loserTeamRows =
-    loser?.teamCodes.map((code) => {
-      const stat = teamStats[code] ?? {
-        points: 0,
-        goalsFor: 0,
-        goalsAgainst: 0,
-      };
-      return {
-        code,
-        name: getTeamDisplayName(code),
-        owners: ownerMap.get(code.toUpperCase()) ?? [],
-        points: toNum(stat.points),
-        goalsFor: toNum(stat.goalsFor),
-        goalsAgainst: toNum(stat.goalsAgainst),
-        goalDifference: toNum(stat.goalsFor) - toNum(stat.goalsAgainst),
-      };
-    }) ?? [];
-
-  const totalPTS = loserTeamRows.reduce((s, r) => s + r.points, 0);
-  const totalGF = loserTeamRows.reduce((s, r) => s + r.goalsFor, 0);
-  const totalGA = loserTeamRows.reduce((s, r) => s + r.goalsAgainst, 0);
-  const totalGD = totalGF - totalGA;
-
   return (
     <div className="card card-lg">
-      <h3 className="fun-title">🥄 Wooden Spoon</h3>
-      <p className="fun-subtitle">
-        Ranking is worst-to-best by: Points → Goal Difference → Goals For
-      </p>
-
       {loser ? (
         <>
           <div style={{ marginTop: 14 }}>
-            <h2>{loser.name}</h2>
-            <p className="fun-subtitle" style={{ marginTop: 6 }}>
-              Aggregate: {totalPTS} pts • GD {totalGD} • GF {totalGF} • GA{" "}
-              {totalGA}
-            </p>
+            <h2>
+              Worst team owner: <b>{loser.name}</b>
+            </h2>
           </div>
-
-          <ul className="spaced-list" style={{ marginTop: 12 }}>
-            {loserTeamRows.map((r) => (
-              <li key={r.code}>
-                {codeToFlagEmoji(r.code)} <strong>{r.name}</strong> (
-                {r.owners.join(", ") || "—"}) — {r.points} pts, GD{" "}
-                {r.goalDifference}, GF {r.goalsFor}, GA {r.goalsAgainst}
-              </li>
-            ))}
-          </ul>
         </>
       ) : (
         <p style={{ marginTop: 12 }}>No wooden spoon winner yet.</p>

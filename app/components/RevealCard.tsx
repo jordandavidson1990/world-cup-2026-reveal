@@ -1,8 +1,8 @@
 import { EntrantResult } from "../types";
+import { codeToFlagEmoji } from "../utils/codeToFlagEmoji";
 
 export default function RevealCard({
   result,
-  mode,
 }: {
   result: EntrantResult | null;
   mode: "eliminated" | "remaining";
@@ -11,53 +11,138 @@ export default function RevealCard({
     return <div className="card card-lg">No one to reveal in this stage.</div>;
   }
 
-  const title = mode === "eliminated" ? "Eliminated Reveal" : "Still In Reveal";
-  const intro =
-    mode === "eliminated"
-      ? "This one hurts... 😬"
-      : "Still alive and kicking! 💪";
+  const isEliminated = result.isEliminated;
 
   return (
-    <div className="card card-lg">
-      <p className="fun-subtitle">{title}</p>
-      <h3 className="fun-title" style={{ marginTop: 4 }}>
+    <div
+      className="card card-lg"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        padding: "32px 28px 28px",
+      }}
+    >
+      {/* Accent bar */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: isEliminated ? "var(--danger)" : "var(--success)",
+        }}
+      />
+
+      {/* Eyebrow */}
+      <p
+        style={{
+          margin: 0,
+          fontSize: 11,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: "var(--muted)",
+        }}
+      >
+        Eliminated reveal
+      </p>
+
+      {/* Name */}
+      <h2
+        className="fun-title"
+        style={{
+          marginTop: 10,
+          fontSize: "clamp(2rem, 5vw, 3.2rem)",
+          lineHeight: 1,
+          letterSpacing: "0.04em",
+        }}
+      >
         {result.entrant.name}
-      </h3>
-      <p style={{ marginTop: 8 }}>
+      </h2>
+
+      {/* Status badge */}
+      <div style={{ marginTop: 14 }}>
         <span
-          className={`badge ${result.isEliminated ? "badge-out" : "badge-in"}`}
+          className={`badge ${isEliminated ? "badge-out" : "badge-in"}`}
+          style={{ fontSize: 13, padding: "7px 16px" }}
         >
-          {result.isEliminated ? "Eliminated" : "Still In"}
+          {isEliminated ? "💀 Eliminated" : "✅ Still In"}
         </span>
-      </p>
-
-      <p className="fun-subtitle" style={{ marginTop: 12 }}>
-        {intro}
-      </p>
-
-      <div className="reveal-grid" style={{ marginTop: 18 }}>
-        <div className="panel-soft">
-          <strong>✅ Active Teams</strong>
-          <ul className="spaced-list">
-            {result.activeTeams.length === 0 ? (
-              <li>None left</li>
-            ) : (
-              result.activeTeams.map((t) => <li key={t.code}>{t.name}</li>)
-            )}
-          </ul>
-        </div>
-
-        <div className="panel-soft">
-          <strong>❌ Eliminated Teams</strong>
-          <ul className="spaced-list">
-            {result.eliminatedTeams.length === 0 ? (
-              <li>None yet</li>
-            ) : (
-              result.eliminatedTeams.map((t) => <li key={t.code}>{t.name}</li>)
-            )}
-          </ul>
-        </div>
       </div>
+
+      {/* Divider */}
+      <div
+        style={{
+          margin: "24px 0",
+          height: 1,
+          background: "var(--border)",
+        }}
+      />
+
+      {/* Eliminated teams */}
+      {result.eliminatedTeams.length > 0 && (
+        <div>
+          <p
+            style={{
+              margin: "0 0 12px",
+              fontSize: 11,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+            }}
+          >
+            Teams knocked out
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {result.eliminatedTeams.map((t) => (
+              <div
+                key={t.code}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
+                  background:
+                    "color-mix(in srgb, var(--danger) 6%, var(--card))",
+                }}
+              >
+                <span style={{ fontSize: 22, lineHeight: 1 }}>
+                  {codeToFlagEmoji(t.code)}
+                </span>
+                <span
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 15,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {t.name}
+                </span>
+                <span
+                  style={{
+                    marginLeft: "auto",
+                    fontSize: 11,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--danger)",
+                    fontWeight: 700,
+                  }}
+                >
+                  Out
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {result.eliminatedTeams.length === 0 && (
+        <p style={{ color: "var(--muted)", fontSize: 14, margin: 0 }}>
+          No teams eliminated yet.
+        </p>
+      )}
     </div>
   );
 }
