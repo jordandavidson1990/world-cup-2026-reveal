@@ -7,11 +7,10 @@ import { usePresentationFlow } from "./hooks/usePresentationFlow";
 import { useTheme } from "./hooks/useTheme";
 import { useWorldCupData } from "./hooks/useWorldCupData";
 import ThemeToggle from "./components/ThemeToggle";
-import StageHeader from "./components/StageHeader";
 import RevealCard from "./components/RevealCard";
 import FixturesBoard from "./components/FixturesBoard";
 import WoodenSpoon from "./components/WoodenSpoon";
-import WoodenSpoonReveal from "./components/WoodenSpoonReveal";
+import WoodenSpoonReveal from "./components/WoodenSpoonReveal/WoodenSpoonReveal";
 import Controls from "./components/Controls";
 import RemainingList from "./components/RemainingList";
 import StartScreen from "./components/StartScreen";
@@ -74,19 +73,6 @@ export default function Page() {
         <p style={{ color: "#f59e0b", marginTop: 10 }}>{warning}</p>
       ) : null}
 
-      <div style={{ marginTop: 18 }}>
-        <StageHeader stage={stage} />
-      </div>
-
-      <Controls
-        onPrev={prevReveal}
-        onNext={nextReveal}
-        onReset={() => {
-          reset();
-          setStarted(false);
-        }}
-      />
-
       <div style={{ marginTop: 16 }}>
         {stage === "eliminated" && (
           <RevealCard result={current} mode="eliminated" />
@@ -115,6 +101,14 @@ export default function Page() {
           />
         )}
       </div>
+      <Controls
+        onPrev={prevReveal}
+        onNext={nextReveal}
+        onReset={() => {
+          reset();
+          setStarted(false);
+        }}
+      />
     </main>
   );
 }

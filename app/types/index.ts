@@ -33,3 +33,15 @@ export type EntrantResult = {
   eliminatedTeams: Team[];
   isEliminated: boolean;
 };
+
+export type Theme = "light" | "dark";
+
+export type Row = {
+  code: string;
+  name: string;
+  owners: string[];
+  points: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+};
