@@ -26,9 +26,7 @@ export default function StartScreen({ theme, onToggle, onStart }: Props) {
       >
         <div>
           <h1>🏆 World Cup Sweep Night</h1>
-          <p className="hero-sub">
-            Big reveals, big drama, and one unlucky wooden spoon.
-          </p>
+          <p className="hero-sub">2026 SP World Cup Sweepstake Update</p>
         </div>
         <ThemeToggle theme={theme} onToggle={onToggle} />
       </div>
