@@ -56,81 +56,106 @@ export default function RemainingList({
         style={{ margin: "24px 0", height: 1, background: "var(--border)" }}
       />
 
-      {/* List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {/* Responsive Grid Layout Wrapper */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gap: 16,
+        }}
+      >
         {remaining.map((r) => (
           <div
             key={r.entrant.id}
             style={{
               display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "11px 14px",
-              borderRadius: 10,
+              flexDirection: "column",
+              gap: 14,
+              padding: "18px",
+              borderRadius: 12,
               border: "1px solid var(--border)",
-              background: "color-mix(in srgb, var(--success) 5%, var(--card))",
+              background: "color-mix(in srgb, var(--success) 3%, var(--card))",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
             }}
           >
-            {/* Name */}
-            <span
-              style={{
-                fontWeight: 700,
-                fontSize: 15,
-                letterSpacing: "0.02em",
-                minWidth: 90,
-              }}
-            >
-              {r.entrant.name}
-            </span>
-
-            {/* Divider pip */}
-            <span
-              style={{ color: "var(--border)", fontSize: 18, lineHeight: 1 }}
-            >
-              ·
-            </span>
-
-            {/* Teams */}
-            <span
+            {/* Header Row: Player Name & Status Badge */}
+            <div
               style={{
                 display: "flex",
-                flexWrap: "wrap",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: 16,
+                  letterSpacing: "0.01em",
+                }}
+              >
+                {r.entrant.name}
+              </span>
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--success)",
+                  fontWeight: 700,
+                }}
+              >
+                ✓ In
+              </span>
+            </div>
+
+            {/* Subtle Inner Card Divider */}
+            <div
+              style={{ height: 1, background: "var(--border)", opacity: 0.5 }}
+            />
+
+            {/* Teams Block */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
                 gap: 8,
                 flex: 1,
               }}
             >
-              {r.activeTeams.map((t) => (
-                <span
-                  key={t.code}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 5,
-                    fontSize: 14,
-                  }}
-                >
-                  <span style={{ fontSize: 16 }}>
-                    {codeToFlagEmoji(t.code)}
-                  </span>
-                  {t.name}
-                </span>
-              ))}
-            </span>
-
-            {/* Badge */}
-            <span
-              style={{
-                marginLeft: "auto",
-                fontSize: 11,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--success)",
-                fontWeight: 700,
-                flexShrink: 0,
-              }}
-            >
-              ✓ In
-            </span>
+              <span
+                style={{
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  color: "var(--muted)",
+                  fontWeight: 600,
+                }}
+              >
+                Active Teams
+              </span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {r.activeTeams.map((t) => (
+                  <div
+                    key={t.code}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      fontSize: 13,
+                      background: "var(--background)",
+                      padding: "4px 10px",
+                      borderRadius: 8,
+                      border: "1px solid var(--border)",
+                    }}
+                  >
+                    <span style={{ fontSize: 14 }}>
+                      {codeToFlagEmoji(t.code)}
+                    </span>
+                    <span style={{ fontWeight: 500 }}>{t.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         ))}
       </div>

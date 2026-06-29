@@ -8,14 +8,13 @@ type Props = {
 
 export default function StartScreen({ theme, onToggle, onStart }: Props) {
   const steps = [
-    { emoji: "💔", label: "Eliminated players", sub: "one by one" },
-    { emoji: "✨", label: "Remaining players", sub: "still in the running" },
-    { emoji: "🗓️", label: "Fixtures & dates", sub: "what's still to play" },
-    { emoji: "🥁", label: "Wooden spoon bottom-10", sub: "dramatic reveal" },
+    { emoji: "💔", label: "Eliminated players" },
+    { emoji: "✨", label: "Remaining players" },
+    { emoji: "🗓️", label: "Fixtures & dates" },
+    { emoji: "🥁", label: "Wooden spoon countdown" },
     {
-      emoji: "🥄",
-      label: "Full wooden spoon table",
-      sub: "and the unlucky winner",
+      emoji: "🍴",
+      label: "Full table",
     },
   ];
 
@@ -113,17 +112,6 @@ export default function StartScreen({ theme, onToggle, onStart }: Props) {
               </span>
               <span style={{ fontWeight: 700, fontSize: 15 }}>
                 {step.label}
-              </span>
-              <span
-                style={{
-                  marginLeft: "auto",
-                  fontSize: 12,
-                  color: "var(--muted)",
-                  letterSpacing: "0.04em",
-                  flexShrink: 0,
-                }}
-              >
-                {step.sub}
               </span>
             </div>
           ))}
