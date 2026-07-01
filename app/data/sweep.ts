@@ -88,7 +88,7 @@ export const fallbackTeams: Team[] = [
   { code: "USA", name: "United States", status: "active" },
   { code: "NZL", name: "New Zealand", status: "eliminated" },
   { code: "CUW", name: "Curacao", status: "eliminated" },
-  { code: "COD", name: "DR Congo", status: "active" },
+  { code: "COD", name: "DR Congo", status: "eliminated" },
   { code: "BRA", name: "Brazil", status: "active" },
   { code: "IRQ", name: "Iraq", status: "eliminated" },
   { code: "GHA", name: "Ghana", status: "active" },

@@ -16,6 +16,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "World Cup 2026 Sweep Reveal",
   description: "Presentation app for sweepstake reveal",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

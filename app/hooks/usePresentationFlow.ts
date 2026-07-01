@@ -41,6 +41,7 @@ export const usePresentationFlow = (results: EntrantResult[]) => {
       : [];
 
   const current = currentList[revealIndex] ?? null;
+  const nextCurrent = currentList[revealIndex + 1] ?? null;
 
   const nextReveal = () => {
     if (stage === "eliminated") {
@@ -123,5 +124,6 @@ export const usePresentationFlow = (results: EntrantResult[]) => {
     nextReveal,
     prevReveal,
     reset,
+    nextCurrent,
   };
 };

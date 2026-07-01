@@ -1,21 +1,27 @@
+import React from "react";
 import ThemeToggle from "./ThemeToggle";
 
 type Props = {
   theme: "light" | "dark";
   onToggle: () => void;
   onStart: () => void;
+  isPlaying: boolean;
+  onToggleMusic: () => void;
 };
 
-export default function StartScreen({ theme, onToggle, onStart }: Props) {
+export const StartScreen = ({
+  theme,
+  onToggle,
+  onStart,
+  isPlaying,
+  onToggleMusic,
+}: Props) => {
   const steps = [
     { emoji: "💔", label: "Eliminated players" },
     { emoji: "✨", label: "Remaining players" },
     { emoji: "🗓️", label: "Fixtures & dates" },
     { emoji: "🥁", label: "Wooden spoon countdown" },
-    {
-      emoji: "🍴",
-      label: "Full table",
-    },
+    { emoji: "🍴", label: "Full table" },
   ];
 
   return (
@@ -28,7 +34,30 @@ export default function StartScreen({ theme, onToggle, onStart }: Props) {
           <h1>🏆 World Cup Sweep Night</h1>
           <p className="hero-sub">2026 SP World Cup Sweepstake Update</p>
         </div>
-        <ThemeToggle theme={theme} onToggle={onToggle} />
+
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button
+            onClick={onToggleMusic}
+            style={{
+              background: "color-mix(in srgb, var(--primary) 6%, var(--card))",
+              border: "1px solid var(--border)",
+              borderRadius: "50%",
+              width: 40,
+              height: 40,
+              cursor: "pointer",
+              fontSize: 16,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              transition: "transform 0.1s ease",
+            }}
+            title={isPlaying ? "Mute Music" : "Play Music"}
+          >
+            {isPlaying ? "🎵" : "🔇"}
+          </button>
+          <ThemeToggle theme={theme} onToggle={onToggle} />
+        </div>
       </div>
 
       <section
@@ -81,7 +110,7 @@ export default function StartScreen({ theme, onToggle, onStart }: Props) {
           style={{ margin: "24px 0", height: 1, background: "var(--border)" }}
         />
 
-        {/* Steps */}
+        {/* Steps Stack */}
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {steps.map((step, i) => (
             <div
@@ -142,4 +171,6 @@ export default function StartScreen({ theme, onToggle, onStart }: Props) {
       </section>
     </main>
   );
-}
+};
+
+export default StartScreen;
