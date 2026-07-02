@@ -28,7 +28,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bebas.variable} ${inter.variable}`}>{children}</body>
+      <body className={`${bebas.variable} ${inter.variable}`}>
+        <main
+          style={{ maxWidth: "900px", margin: "0 auto", padding: "60px 20px" }}
+        >
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

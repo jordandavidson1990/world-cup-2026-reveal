@@ -68,8 +68,6 @@ const Page = () => {
   const handleNext = () => {
     if (stage === "eliminated") {
       if (nextCurrent) {
-        console.log("HELLO");
-
         playSquidGameEliminationSound();
       } else {
         playCheer();
@@ -129,7 +127,16 @@ const Page = () => {
             }}
           >
             <div>
-              <h1>🏆 World Cup Sweep Night</h1>
+              <h1
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "3rem",
+                  letterSpacing: "0.5px",
+                  margin: 0,
+                }}
+              >
+                🏆 World Cup Sweep Night
+              </h1>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

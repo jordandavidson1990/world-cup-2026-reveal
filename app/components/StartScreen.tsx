@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import ThemeToggle from "./ThemeToggle";
 
 type Props = {
@@ -20,19 +21,43 @@ export const StartScreen = ({
     { emoji: "💔", label: "Eliminated players" },
     { emoji: "✨", label: "Remaining players" },
     { emoji: "🗓️", label: "Fixtures & dates" },
-    { emoji: "🥁", label: "Wooden spoon countdown" },
+    { emoji: "🥄", label: "Wooden spoon prize" },
     { emoji: "🍴", label: "Full table" },
   ];
 
   return (
     <main className="container">
+      {/* Top Header Row */}
       <div
         className="row"
-        style={{ justifyContent: "space-between", alignItems: "center" }}
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 32,
+        }}
       >
         <div>
-          <h1>🏆 World Cup Sweep Night</h1>
-          <p className="hero-sub">2026 SP World Cup Sweepstake Update</p>
+          <h1
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "3rem",
+              letterSpacing: "0.5px",
+              margin: 0,
+            }}
+          >
+            🏆 World Cup Sweep
+          </h1>
+          <p
+            className="hero-sub"
+            style={{
+              opacity: 0.6,
+              fontSize: "0.9rem",
+              marginTop: 4,
+              letterSpacing: "0.05em",
+            }}
+          >
+            2026 SP Live Presentation
+          </p>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -50,7 +75,7 @@ export const StartScreen = ({
               alignItems: "center",
               justifyContent: "center",
               boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-              transition: "transform 0.1s ease",
+              transition: "transform 0.15s ease",
             }}
             title={isPlaying ? "Mute Music" : "Play Music"}
           >
@@ -60,16 +85,20 @@ export const StartScreen = ({
         </div>
       </div>
 
+      {/* Main Presentation Layout Card */}
       <section
         className="card card-lg"
         style={{
-          marginTop: 24,
           position: "relative",
           overflow: "hidden",
           padding: "36px 32px 32px",
+          borderRadius: "16px",
+          background: "var(--card)",
+          border: "1px solid var(--border)",
+          boxShadow: "0 12px 40px rgba(0, 0, 0, 0.04)",
         }}
       >
-        {/* Accent bar */}
+        {/* Sleek Linear Accent Bar */}
         <div
           style={{
             position: "absolute",
@@ -78,28 +107,39 @@ export const StartScreen = ({
             right: 0,
             height: 4,
             background:
-              "linear-gradient(to right, var(--primary), var(--accent))",
+              "linear-gradient(to right, var(--primary), var(--accent, #eab308))",
           }}
         />
 
-        {/* Header */}
-        <p
+        {/* Running Order Status Header */}
+        <div
           style={{
-            margin: 0,
-            fontSize: 11,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "var(--muted)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          Tonight&apos;s running order
-        </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 11,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              fontWeight: 600,
+            }}
+          >
+            Tonight&apos;s Running Order
+          </p>
+        </div>
+
         <h2
           className="fun-title"
           style={{
-            marginTop: 10,
-            fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
+            marginTop: 14,
+            fontSize: "2.2rem",
             lineHeight: 1,
+            fontFamily: "var(--font-display)",
           }}
         >
           Welcome 👋
@@ -111,64 +151,104 @@ export const StartScreen = ({
         />
 
         {/* Steps Stack */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {steps.map((step, i) => (
             <div
               key={i}
+              className="sleek-step-row"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 14,
-                padding: "12px 16px",
+                gap: 16,
+                padding: "14px 18px",
                 borderRadius: 10,
                 border: "1px solid var(--border)",
                 background:
-                  "color-mix(in srgb, var(--primary) 4%, var(--card))",
+                  "color-mix(in srgb, var(--primary) 3%, var(--card))",
+                transition:
+                  "transform 0.2s ease, border-color 0.2s, background 0.2s",
+                cursor: "default",
               }}
             >
               <span
                 style={{
-                  fontSize: 22,
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  opacity: 0.3,
+                  width: "16px",
+                }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span
+                style={{
+                  fontSize: 20,
                   lineHeight: 1,
-                  width: 32,
+                  width: 28,
                   textAlign: "center",
                   flexShrink: 0,
                 }}
               >
                 {step.emoji}
               </span>
-              <span style={{ fontWeight: 700, fontSize: 15 }}>
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: "15px",
+                  letterSpacing: "-0.1px",
+                }}
+              >
                 {step.label}
               </span>
             </div>
           ))}
         </div>
 
-        {/* CTA */}
+        {/* CTA Launch Control */}
         <button
           onClick={onStart}
           style={{
-            marginTop: 28,
+            marginTop: 32,
             width: "100%",
-            padding: "14px 24px",
-            fontSize: 15,
+            padding: "16px 24px",
+            fontSize: "15px",
             fontWeight: 800,
             letterSpacing: "0.08em",
             textTransform: "uppercase",
-            borderRadius: 12,
+            borderRadius: "12px",
             border: "none",
             background:
-              "linear-gradient(135deg, var(--primary), var(--accent))",
+              "linear-gradient(135deg, var(--primary), var(--accent, #000))",
             color: "#fff",
             cursor: "pointer",
-            transition: "opacity 0.2s ease, transform 0.15s ease",
+            transition: "transform 0.15s ease, filter 0.15s ease",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.filter = "brightness(1.08)";
+            e.currentTarget.style.transform = "translateY(-1px)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.filter = "none";
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
         >
-          Start the show ▶
+          Start the Show ▶
         </button>
       </section>
+
+      {/* Micro-interaction Hover Scope */}
+      <style jsx global>{`
+        .sleek-step-row:hover {
+          transform: translateX(3px);
+          border-color: var(--text);
+          background: color-mix(
+            in srgb,
+            var(--primary) 6%,
+            var(--card)
+          ) !important;
+        }
+      `}</style>
     </main>
   );
 };
