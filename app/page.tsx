@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { entrants } from "./data/sweep";
 import { deriveEntrantResults, getWoodenSpoonWinner } from "./utils/derive";
 import { usePresentationFlow } from "./hooks/usePresentationFlow";
@@ -31,6 +31,12 @@ const Page = () => {
     playSfx,
     handleSfxTimeUpdate,
     stopAllFades,
+    playCheer,
+    cheerAudioRef,
+    moneyAudioRef,
+    playMoney,
+    playSquidGameEliminationSound,
+    squidGameEliminationRef,
   } = useAudioEngine();
 
   const results = deriveEntrantResults(entrants, teams);
@@ -60,11 +66,27 @@ const Page = () => {
   } = usePresentationFlow(results);
 
   const handleNext = () => {
-    if (stage === "eliminated" && nextCurrent) {
+    if (stage === "eliminated") {
+      if (nextCurrent) {
+        console.log("HELLO");
+
+        playSquidGameEliminationSound();
+      } else {
+        playCheer();
+      }
+    }
+    if (stage === "wooden-spoon-reveal" && woodenRevealIndex !== 10) {
       playSfx();
     }
+
     nextReveal();
   };
+
+  useEffect(() => {
+    if (stage === "wooden-spoon") {
+      playMoney();
+    }
+  }, [stage, playMoney]);
 
   return (
     <>
@@ -76,13 +98,20 @@ const Page = () => {
         preload="auto"
         onTimeUpdate={handleSfxTimeUpdate}
       />
+      <audio ref={cheerAudioRef} src="/cheering.mp3" preload="auto" />
+      <audio ref={moneyAudioRef} src="/money.mp3" preload="auto" />
+      <audio
+        ref={squidGameEliminationRef}
+        src="/squid-elimination.mp3"
+        preload="auto"
+      />
 
       {!started ? (
         <StartScreen
           theme={theme}
           onToggle={toggleTheme}
           onStart={() => {
-            playSfx();
+            playSquidGameEliminationSound();
             setStarted(true);
           }}
           isPlaying={isPlaying}

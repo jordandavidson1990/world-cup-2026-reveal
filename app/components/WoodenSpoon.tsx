@@ -3,6 +3,7 @@ import { entrants } from "../data/sweep";
 import { getTeamDisplayName } from "../utils/getTeamDisplayName";
 import { codeToFlagEmoji } from "../utils/codeToFlagEmoji";
 import { buildOwnerMap } from "../utils/buildOwnerMap";
+import TearingBanknote from "./TearingBankNote";
 
 type WoodenSpoonProps = {
   loser: Entrant | null;
@@ -72,15 +73,23 @@ export default function WoodenSpoon({
     <div className="card card-lg">
       {loser ? (
         <>
-          <div style={{ marginTop: 14 }}>
+          <div
+            style={{
+              marginTop: 14,
+              marginBottom: 12,
+              textAlign: "center",
+            }}
+          >
             <h2>
-              Worst team owner: <b>{loser.name}</b>
+              💰 Wooden Spoon Cash Winner: <b>{loser.name}</b> 🇮🇶
             </h2>
           </div>
         </>
       ) : (
         <p style={{ marginTop: 12 }}>No wooden spoon winner yet.</p>
       )}
+
+      <TearingBanknote />
 
       <div style={{ marginTop: 22 }}>
         <h4 className="fun-title" style={{ fontSize: "1.05rem" }}>

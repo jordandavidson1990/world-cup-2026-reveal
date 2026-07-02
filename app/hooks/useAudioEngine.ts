@@ -1,12 +1,30 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, RefObject } from "react";
 
 export const useAudioEngine = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const elimAudioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const cheerAudioRef = useRef<HTMLAudioElement | null>(null);
+  const moneyAudioRef = useRef<HTMLAudioElement | null>(null);
+  const squidGameEliminationRef = useRef<HTMLAudioElement | null>(null);
+
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const triggerSound = (
+    ref: RefObject<HTMLAudioElement | null>,
+    debugName = "SFX"
+  ) => {
+    const audio = ref.current;
+    if (!audio) return;
+
+    audio.volume = 1.0;
+    audio.currentTime = 0;
+    audio
+      .play()
+      .catch((err) => console.log(`${debugName} SFX blocked or failed:`, err));
+  };
 
   const toggleMusic = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -25,24 +43,23 @@ export const useAudioEngine = () => {
     }
   };
 
-  const playSfx = () => {
-    if (!elimAudioRef.current) return;
-
-    // Clear active fades if sounds are triggered concurrently
+  const stopAllFades = () => {
     if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-
-    elimAudioRef.current.volume = 1.0;
-    elimAudioRef.current.currentTime = 0;
-    elimAudioRef.current
-      .play()
-      .catch((err) => console.log("SFX blocked or failed:", err));
   };
+
+  const playSfx = () => {
+    stopAllFades();
+    triggerSound(elimAudioRef, "Elimination");
+  };
+
+  const playCheer = () => triggerSound(cheerAudioRef, "Cheer");
+  const playMoney = () => triggerSound(moneyAudioRef, "Money");
 
   const handleSfxTimeUpdate = () => {
     const audio = elimAudioRef.current;
     if (!audio || audio.paused) return;
 
-    const fadeWindow = 0.3; // Seconds before tail-end to begin fade out
+    const fadeWindow = 0.3;
 
     if (
       audio.duration &&
@@ -50,16 +67,15 @@ export const useAudioEngine = () => {
       audio.currentTime > audio.duration - fadeWindow &&
       audio.volume > 0.95
     ) {
-      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      stopAllFades();
 
       let currentVolume = 1.0;
-
       fadeIntervalRef.current = setInterval(() => {
         currentVolume -= 0.1;
         if (currentVolume <= 0) {
           audio.volume = 0;
           audio.pause();
-          if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+          stopAllFades();
         } else {
           audio.volume = currentVolume;
         }
@@ -67,17 +83,23 @@ export const useAudioEngine = () => {
     }
   };
 
-  const stopAllFades = () => {
-    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+  const playSquidGameEliminationSound = () => {
+    triggerSound(squidGameEliminationRef, "Elimination");
   };
 
   return {
     audioRef,
     elimAudioRef,
+    cheerAudioRef,
+    moneyAudioRef,
     isPlaying,
     toggleMusic,
     playSfx,
+    playCheer,
+    playMoney,
     handleSfxTimeUpdate,
     stopAllFades,
+    playSquidGameEliminationSound,
+    squidGameEliminationRef,
   };
 };
