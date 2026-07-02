@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { entrants } from "./data/sweep";
 import { deriveEntrantResults, getWoodenSpoonWinner } from "./utils/derive";
 import { usePresentationFlow } from "./hooks/usePresentationFlow";
@@ -16,27 +16,29 @@ import WoodenSpoonReveal from "./components/WoodenSpoonReveal/WoodenSpoonReveal"
 import Controls from "./components/Controls";
 import RemainingList from "./components/RemainingList";
 import StartScreen from "./components/StartScreen";
+import WelcomeScreen from "./components/WelcomeScreen"; // New Import
 import MusicButton from "./components/MusicButton";
 
+type ViewState = "welcome" | "agenda" | "show";
+
 const Page = () => {
-  const [started, setStarted] = useState(false);
+  // Swapped boolean for a progressive multi-stage timeline flow
+  const [view, setView] = useState<ViewState>("welcome");
+
   const { theme, toggleTheme } = useTheme();
   const { teams, fixtures, teamStats, warning } = useWorldCupData();
 
   const {
     audioRef,
     elimAudioRef,
+    cheerAudioRef,
+    moneyAudioRef,
     isPlaying,
     toggleMusic,
     playSfx,
+    playCheer,
     handleSfxTimeUpdate,
     stopAllFades,
-    playCheer,
-    cheerAudioRef,
-    moneyAudioRef,
-    playMoney,
-    playSquidGameEliminationSound,
-    squidGameEliminationRef,
   } = useAudioEngine();
 
   const results = deriveEntrantResults(entrants, teams);
@@ -66,29 +68,15 @@ const Page = () => {
   } = usePresentationFlow(results);
 
   const handleNext = () => {
-    if (stage === "eliminated") {
-      if (nextCurrent) {
-        playSquidGameEliminationSound();
-      } else {
-        playCheer();
-      }
-    }
-    if (stage === "wooden-spoon-reveal" && woodenRevealIndex !== 10) {
+    if (stage === "eliminated" && nextCurrent) {
       playSfx();
     }
-
     nextReveal();
   };
 
-  useEffect(() => {
-    if (stage === "wooden-spoon") {
-      playMoney();
-    }
-  }, [stage, playMoney]);
-
   return (
     <>
-      {/* Structural Audio Element Node Links */}
+      {/* Structural Audio Nodes */}
       <audio ref={audioRef} src="/waka-waka.mp3" loop preload="auto" />
       <audio
         ref={elimAudioRef}
@@ -96,26 +84,39 @@ const Page = () => {
         preload="auto"
         onTimeUpdate={handleSfxTimeUpdate}
       />
-      <audio ref={cheerAudioRef} src="/cheering.mp3" preload="auto" />
+      <audio ref={cheerAudioRef} src="/cheer.mp3" preload="auto" />
       <audio ref={moneyAudioRef} src="/money.mp3" preload="auto" />
-      <audio
-        ref={squidGameEliminationRef}
-        src="/squid-elimination.mp3"
-        preload="auto"
-      />
 
-      {!started ? (
+      {/* STAGE 1: SPANISH WELCOME INTRO */}
+      {view === "welcome" && (
+        <WelcomeScreen
+          theme={theme}
+          onToggle={toggleTheme}
+          isPlaying={isPlaying}
+          onToggleMusic={toggleMusic}
+          onStart={() => {
+            playCheer(); // Fires an upscale cheering sound when Jordan welcomes them
+            setView("agenda"); // Marches forward to running order checklist
+          }}
+        />
+      )}
+
+      {/* STAGE 2: RUNNING ORDER CHECKLIST */}
+      {view === "agenda" && (
         <StartScreen
           theme={theme}
           onToggle={toggleTheme}
-          onStart={() => {
-            playSquidGameEliminationSound();
-            setStarted(true);
-          }}
           isPlaying={isPlaying}
           onToggleMusic={toggleMusic}
+          onStart={() => {
+            playSfx(); // Classic Vine-Boom impact transition into live data
+            setView("show"); // Unlocks presentation engine
+          }}
         />
-      ) : (
+      )}
+
+      {/* STAGE 3: THE MAIN SHOW LOOPS */}
+      {view === "show" && (
         <main className="container">
           <div
             className="row"
@@ -127,16 +128,7 @@ const Page = () => {
             }}
           >
             <div>
-              <h1
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "3rem",
-                  letterSpacing: "0.5px",
-                  margin: 0,
-                }}
-              >
-                🏆 World Cup Sweep Night
-              </h1>
+              <h1>🏆 World Cup Sweep Night</h1>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -183,7 +175,7 @@ const Page = () => {
             onReset={() => {
               stopAllFades();
               reset();
-              setStarted(false);
+              setView("welcome"); // Full layout reset loops right back to the splash page
             }}
           />
         </main>
